@@ -22,10 +22,14 @@
             background-image: url(icon-3.png);
             background-size: 100%;
         }
-    </style>
-    <div class="mx-auto mt-5 pt-5" style="width: 500px">
 
-        <div id="settings">
+        td {
+            width: 30% !important;
+            padding-bottom: 30% !important;
+        }
+    </style>
+    <div class="mx-auto mt-5 pt-5 container">
+        <div id="settings" class="col-12 col-lg-6 mx-auto">
             <h3>Escolham seus personagens</h3>
             <div class="form-group">
                 <label>Jogador 1</label>
@@ -62,10 +66,10 @@
             <button class="btn btn-info btn-block" id="start">Começar</button>
         </div>
 
-        <div id="game" style="display: none;">
+        <div id="game" class="col-12 col-lg-6 mx-auto" style="display: none;">
             <h3>JOGO DA VELHA 🧓</h3>
             <div class="alert alert-success mt-5" id="message" style="display: none;"></div>
-            <table class="table table-bordered mt-5 pt-5 mx-auto" style="height: 500px;">
+            <table class="table table-bordered mt-5 pt-5 mx-auto">
                 <tr>
                     <td id="1"></td>
                     <td id="2"></td>
