@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOGO DA VELHA</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <style>
+        .clicked-pardo {
+            background-image: url(icon-1.png);
+            background-size: 100%;
+        }
+
+        .clicked-panda {
+            background-image: url(icon-2.png);
+            background-size: 100%;
+        }
+
+        .clicked-polar {
+            background-image: url(icon-3.png);
+            background-size: 100%;
+        }
+    </style>
+    <div class="mx-auto mt-5 pt-5" style="width: 500px">
+
+        <div id="settings">
+            <h3>Escolham seus personagens</h3>
+            <div class="form-group">
+                <label>Jogador 1</label>
+                <div class="custom-control custom-radio">
+                    <input type="radio" checked id="pardo1" name="player1" class="custom-control-input" value="pardo">
+                    <label class="custom-control-label" for="pardo1">Pardo</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="panda1" name="player1" class="custom-control-input" value="panda">
+                    <label class="custom-control-label" for="panda1">Panda</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="polar1" name="player1" class="custom-control-input" value="polar">
+                    <label class="custom-control-label" for="polar1">Polar</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Jogador 2</label>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="pardo2" name="player2" class="custom-control-input" value="pardo">
+                    <label class="custom-control-label" for="pardo2">Pardo</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" checked id="panda2" name="player2" class="custom-control-input" value="panda">
+                    <label class="custom-control-label" for="panda2">Panda</label>
+                </div>
+                <div class="custom-control custom-radio">
+                    <input type="radio" id="polar2" name="player2" class="custom-control-input" value="polar">
+                    <label class="custom-control-label" for="polar2">Polar</label>
+                </div>
+            </div>
+
+            <button class="btn btn-info btn-block" id="start">Começar</button>
+        </div>
+
+        <div id="game" style="display: none;">
+            <h3>JOGO DA VELHA 🧓</h3>
+            <div class="alert alert-success mt-5" id="message" style="display: none;"></div>
+            <table class="table table-bordered mt-5 pt-5 mx-auto" style="height: 500px;">
+                <tr>
+                    <td id="1"></td>
+                    <td id="2"></td>
+                    <td id="3"></td>
+                </tr>
+                <tr>
+                    <td id="4"></td>
+                    <td id="5"></td>
+                    <td id="6"></td>
+                </tr>
+                <tr>
+                    <td id="7"></td>
+                    <td id="8"></td>
+                    <td id="9"></td>
+                </tr>
+            </table>
+            <button class="btn btn-info btn-block" onclick="window.location.reload()">Reiniciar</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#start").on("click", function() {
+                $("#settings").hide();
+                $("#game").show();
+                var player1 = $("input[name='player1']:checked").val();
+                var player2 = $("input[name='player2']:checked").val();
+
+                var personagens = [
+                    "pardo",
+                    "panda",
+                    "polar"
+                ];
+
+                if (!personagens.includes(player1)) {
+                    alert("Player 1: O personagem que você escolheu não existe.");
+                    location.reload();
+                    return;
+                }
+
+                if (!personagens.includes(player2)) {
+                    alert("Player 2: O personagem que você escolheu não existe.");
+                    location.reload();
+                    return;
+                }
+
+                if (player1 == player2) {
+                    alert("Vocês não podem usar o mesmo personagem.");
+                    location.reload();
+                    return;
+                }
+
+                var play = player1;
+
+                $("#message").html("E a vez do " + play.toUpperCase() + ":").show();
+
+                $("td").on("click", function() {
+                    if ($(this).hasClass("clicked")) {
+                        return;
+                    }
+
+                    $(this).addClass("clicked");
+                    $(this).addClass("clicked-" + play);
+
+                    if (validate(play)) {
+                        return;
+                    }
+
+                    play = (play == player1) ? player2 : player1;
+
+                    $("#message").html("E a vez do " + play.toUpperCase() + ":").show();
+                });
+
+            });
+        });
+
+        function validate(play) {
+            var ids = [];
+            $.each($(".clicked-" + play), function (index, element) {
+                ids.push(parseInt($(element).attr("id")));
+            });
+
+            if ( // VERIFICA TODAS AS COMBINAÇÕES
+                ids.includes(1) && ids.includes(2) && ids.includes(3) ||
+                ids.includes(4) && ids.includes(5) && ids.includes(6) ||
+                ids.includes(7) && ids.includes(8) && ids.includes(9) ||
+                ids.includes(1) && ids.includes(4) && ids.includes(7) ||
+                ids.includes(2) && ids.includes(5) && ids.includes(8) ||
+                ids.includes(3) && ids.includes(6) && ids.includes(9) ||
+                ids.includes(1) && ids.includes(5) && ids.includes(9) ||
+                ids.includes(3) && ids.includes(5) && ids.includes(7)
+            ) {
+
+                $(".clicked-" + play).css("transition", "transform 3s");
+                $(".clicked-" + play).css("transform", "rotateY(360deg)");
+                $("#message").html("O " + play.toUpperCase() + " venceu!!").show();
+                $("td").addClass("clicked");
+                return true;
+            }
+
+            if ($("td.clicked").length == 9) {
+                $("#message").html("O jogo EMPATOU!!").show();
+                return true;
+            }
+        }
+
+
+    </script>
+</body>
+</html>
